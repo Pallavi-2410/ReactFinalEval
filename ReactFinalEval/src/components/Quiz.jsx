@@ -6,6 +6,7 @@ import axios from 'axios'
 const Quiz = () => {
 
     const [questions, setQuestions] = useState([]);
+    const [submit, setSubmit] = useState("");
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null)
     
@@ -21,6 +22,21 @@ const Quiz = () => {
         }
         fetchQuestions()
     },[])
+
+    useEffect(()=> {
+        const submitQuestions = async() => {
+            try{
+                const response = await axios.post(`https://speckled-succinct-yellowhorn.glitch.me/submit`)
+                setSubmit(response.data)
+                }catch(err) {
+                setError(err.response.data.message)
+            }
+        }
+        submitQuestions()
+    },[])
+
+    if (error) return <p>"Error", {error}</p>
+    if (loading) return <p>Loading...</p>
     return (
         <div>
             <h1>Take the Quiz</h1>
